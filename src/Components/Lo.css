@@ -1,0 +1,91 @@
+
+/* 
+.sidebar{
+    text-decoration: none;
+    width: fit-content;
+    background-color: rgb(108, 193, 214);
+    padding-bottom: 200px;
+} */
+button{
+    float: right;
+}
+/* Sidebar Container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #333; /* adjust to your preference */
+    transition: transform 0.3s ease;
+    z-index: 1000; /* ensure it's above other content */
+  }
+  
+  /* Sidebar Active State */
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
+  /* Sidebar Toggle Button */
+  .toggle-btn {
+    position: absolute;
+    top: 20px;
+    right: -30px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff; /* adjust to your preference */
+  }
+  
+  /* Sidebar Menu */
+  .sidebar-menu {
+    list-style-type: none;
+    padding: 20px;
+  }
+  
+  /* Sidebar Menu Items */
+  .sidebar-menu li {
+    margin-bottom: 10px;
+  }
+  
+  /* Sidebar Menu Links */
+  .sidebar-menu li a {
+    display: block;
+    padding: 10px;
+    color: #fff; /* adjust to your preference */
+    text-decoration: none;
+  }
+  
+  /* Sidebar Menu Links Hover Effect */
+  .sidebar-menu li a:hover {
+    background-color: #555; /* adjust to your preference */
+  }
+  
+  /* Dropdown Menu */
+  .dropdown {
+    display: none;
+    margin-left: 20px; /* adjust to your preference */
+  }
+  
+  /* Dropdown Active State */
+  .dropdown.active {
+    display: block;
+  }
+  
+  /* Dropdown Menu Items */
+  .dropdown li {
+    margin-bottom: 5px;
+  }
+  
+  /* Dropdown Menu Links */
+  .dropdown li a {
+    padding: 5px;
+    color: #ccc; /* adjust to your preference */
+    text-decoration: none;
+  }
+  
+  /* Dropdown Menu Links Hover Effect */
+  .dropdown li a:hover {
+    color: #fff; /* adjust to your preference */
+  }
+  
+             

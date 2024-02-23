@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
+
 function Navbar() {
   const [backgroundImage, setBackgroundImage] = useState(
     "https://media.istockphoto.com/id/1007374324/photo/view-of-the-promenade-at-night-in-alghero-a-beautiful-city-vibrant-sardinia-italy.jpg?s=2048x2048&w=is&k=20&c=pnhgCyyhoLwmSQQDP-3CDPxMhe8eJ8oNXJcAHEA8U1c="
@@ -45,7 +46,7 @@ function Navbar() {
   );
 }
 
-function FormExample() {
+function Loginpage() {
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
@@ -82,12 +83,13 @@ function FormExample() {
           "token",
           "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXNhZG1pbiIsImlhdCI6MTcwODM0Mjg4NSwiZXhwIjoxNzA4MzYwODg1fQ.bRXp1c3-vyMh-DW_k_MpMiPzQtKsBizeKHm54RR8SHg");
         alert("Login Successful");
+      
         localStorage.setItem("userDetails", JSON.stringify(response.data));
          navigate("/users");
       } else {
         alert(response.data.message);
       }
-    } catch (error) {
+     } catch (error) {
       setError("There was a problem with the login");
       alert("Error logging in:" + error);
     }
@@ -151,4 +153,4 @@ function FormExample() {
   );
 }
 
-export default FormExample;
+export default Loginpage;
