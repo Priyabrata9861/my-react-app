@@ -1,86 +1,17 @@
-
-body{
-  background-color: aqua;
+ button{
+  float: right;
 }
-button{
-    float: right;
+/* p{
+  float: right;
+  
+} */
+.mp{
+  display: block;
 }
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #333;
-    transition: transform 0.3s ease;
-    z-index: 1000; 
-  }
+.mx{
+ padding-top: 90px;
+display: block;
+  float: right;
+  width: 240px;
   
-  
-  .sidebar.active {
-    transform: translateX(0);
-  }
-  
- 
-  .toggle-btn {
-    position: absolute;
-    top: 20px;
-    right: -30px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #fff;
-  }
-  
-  
-  .sidebar-menu {
-    list-style-type: none;
-    padding: 20px;
-  }
-  
- 
-  .sidebar-menu li {
-    margin-bottom: 10px;
-  }
-  
- 
-  .sidebar-menu li a {
-    display: block;
-    padding: 10px;
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  
-  .sidebar-menu li a:hover {
-    background-color: #555; 
-  }
-  
-  
-  .dropdown {
-    display: none;
-    margin-left: 20px; 
-  }
-  
-  .dropdown.active {
-    display: block;
-  }
-  
-  
-  .dropdown li {
-    margin-bottom: 5px;
-  }
-  
- 
-  .dropdown li a {
-    padding: 5px;
-    color: #ccc;
-    text-decoration: none;
-  }
-  
-  
-  .dropdown li a:hover {
-    color: #fff; 
-  }
-  
-             
+} 

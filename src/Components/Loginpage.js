@@ -73,7 +73,7 @@ function Loginpage() {
       userName: formData.userName,
       password: formData.password,
     };
-    const url = "https://be.siaqreporting.com/api/v1/auth/login";
+    const url = "https://new.siaqreporting.com/api/v1/auth/login";
 
     try {
       const response = await axios.post(url, userData);
@@ -85,7 +85,7 @@ function Loginpage() {
         alert("Login Successful");
       
         localStorage.setItem("userDetails", JSON.stringify(response.data));
-         navigate("/users");
+         navigate("/UserList");
       } else {
         alert(response.data.message);
       }
