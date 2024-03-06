@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
-
 
 function Navbar() {
   const [backgroundImage, setBackgroundImage] = useState(
@@ -53,7 +52,7 @@ function Loginpage() {
   });
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [focusedField, setFocusedField] = useState(null); 
+  const [focusedField, setFocusedField] = useState(null);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -63,9 +62,9 @@ function Loginpage() {
   const handleFieldFocus = (fieldName) => {
     setFocusedField(fieldName);
   };
-  useEffect(()=>{
+  useEffect(() => {
     localStorage.clear();
-  })
+  });
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -81,20 +80,21 @@ function Loginpage() {
         setIsLoggedIn(true);
         localStorage.setItem(
           "token",
-          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXNhZG1pbiIsImlhdCI6MTcwODM0Mjg4NSwiZXhwIjoxNzA4MzYwODg1fQ.bRXp1c3-vyMh-DW_k_MpMiPzQtKsBizeKHm54RR8SHg");
+          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXNhZG1pbiIsImlhdCI6MTcwODM0Mjg4NSwiZXhwIjoxNzA4MzYwODg1fQ.bRXp1c3-vyMh-DW_k_MpMiPzQtKsBizeKHm54RR8SHg"
+        );
         alert("Login Successful");
-      
+
         localStorage.setItem("userDetails", JSON.stringify(response.data));
-         navigate("/UserList");
+        navigate("/dashboard");
       } else {
         alert(response.data.message);
       }
-     } catch (error) {
+    } catch (error) {
       setError("There was a problem with the login");
       alert("Error logging in:" + error);
     }
   };
- 
+
   return (
     <>
       <Navbar />
@@ -114,9 +114,7 @@ function Loginpage() {
             onFocus={() => handleFieldFocus("userName")}
             required
           />
-           {focusedField === "userName" && ( 
-            <p>Please enter your username</p>
-          )}
+          {focusedField === "userName" && <p>Please enter your username</p>}
           <br />
           <br />
           <FontAwesomeIcon icon={faLock} style={{ fontSize: "25px" }} />
@@ -130,9 +128,7 @@ function Loginpage() {
             onFocus={() => handleFieldFocus("password")}
             required
           />
-             {focusedField === "password" && ( 
-            <p>Please enter your password</p>
-          )}
+          {focusedField === "password" && <p>Please enter your password</p>}
           <br />
           <br />
 

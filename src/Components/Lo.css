@@ -1,17 +1,42 @@
- button{
+ .z{
   float: right;
+  margin-left: 20px;
+  padding-left: 20px;
 }
-/* p{
-  float: right;
-  
-} */
-.mp{
-  display: block;
-}
+
+
 .mx{
  padding-top: 90px;
-display: block;
-  float: right;
-  width: 240px;
+  float:left;
+  width: 180px;
+  margin: 10px;
+  margin-left: 90px;
   
 } 
+.sb-button{
+border-top: 90px;
+border-right: 90px;
+border-left: 90px;
+border-bottom: 90px;
+border-radius: 50px;
+}
+
+main{
+  width: 100%;
+}
+.mp{
+  padding-right: 30px;
+  width: calc(100vw - 310px);
+  float: right;
+}
+select{
+  width: 105px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 6px;
+}
+/* .css-1wvake5{
+  width: auto !important;
+  min-width: auto !important;
+} */
+ 
