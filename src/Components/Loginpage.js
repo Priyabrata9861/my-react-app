@@ -53,7 +53,8 @@ function Loginpage() {
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
-  const navigate = useNavigate();
+  const [token,setToken]=useState();
+  const navigate = useNavigate(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -77,11 +78,14 @@ function Loginpage() {
     try {
       const response = await axios.post(url, userData);
       if (response.data.status === 1) {
+        const token=response.data.data.list.token;
+        setToken(token);
         setIsLoggedIn(true);
-        localStorage.setItem(
-          "token",
-          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXNhZG1pbiIsImlhdCI6MTcwODM0Mjg4NSwiZXhwIjoxNzA4MzYwODg1fQ.bRXp1c3-vyMh-DW_k_MpMiPzQtKsBizeKHm54RR8SHg"
-        );
+       localStorage.setItem("milu",token)
+        // localStorage.setItem(
+        //   "token",
+        //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXNhZG1pbiIsImlhdCI6MTcwODM0Mjg4NSwiZXhwIjoxNzA4MzYwODg1fQ.bRXp1c3-vyMh-DW_k_MpMiPzQtKsBizeKHm54RR8SHg"
+        // );
         alert("Login Successful");
 
         localStorage.setItem("userDetails", JSON.stringify(response.data));
