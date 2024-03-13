@@ -24,7 +24,7 @@ border-radius: 50px;
 main{
   width: 100%;
 }
-.mp{
+/* .mp{
   padding-right: 30px;
   width: calc(100vw - 310px);
   float: right;
@@ -34,7 +34,7 @@ select{
   padding-top: 8px;
   padding-bottom: 8px;
   border-radius: 6px;
-}
+} */
 /* .css-1wvake5{
   width: auto !important;
   min-width: auto !important;

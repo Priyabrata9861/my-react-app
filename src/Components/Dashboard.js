@@ -9,21 +9,10 @@ import { HiMiniUsers } from "react-icons/hi2";
 import { FaBuildingColumns } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
 import { RiAdminFill } from "react-icons/ri";
+import { useForm, Controller } from "react-hook-form";
+import Select from "react-select";
+import { Col, Button, Row, Form, Modal, Card } from "react-bootstrap";
 const UserList = () => {
-  // const [users, setUsers] = useState([]);
-
-  //   } else {
-  //     axios
-  //       .get("https://dummyjson.com/users")
-  //       .then((response) => {
-  //         setUsers(response.data.users);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching user data:", error);
-  //       });
-  //   }
-  // }, [navigate]);
-
   const [collapsed, setCollapsed] = React.useState(false);
   return (
     <div
@@ -79,7 +68,6 @@ const UserList = () => {
       </Sidebar>
 
       <div>
-        {/* <button className="z" onClick={handleLogOut}>sysadmin LogOut</button> */}
         <button className="sb-button" onClick={() => setCollapsed(!collapsed)}>
           - O-
         </button>
@@ -87,6 +75,7 @@ const UserList = () => {
     </div>
   );
 };
+
 function Dashboard() {
   const navigate = useNavigate();
 
@@ -102,22 +91,45 @@ function Dashboard() {
     if (!token) {
       navigate("/");
     }
-    getAllClient();
-  });
+    getAllClientDD();
+    setSelectedBuildingsBar(122);
+    setSelectedYearForBar();
+    getBuildingCompGraphParamDD();
+  }, []);
 
-  const [client, setClient] = useState("Client");
-  const [building, setBuilding] = useState("Building");
-  const [groupBy, setGroupBy] = useState("Group By");
-  const [year, setYear] = useState("Year");
-  const [environment, setEnvironment] = useState("Environment");
-  const [parameter, setParameter] = useState("Parameter");
+  const [client, setClient] = useState([]);
+  const [selectedClientForBar, setSelectedClientForBar] = useState([]);
+  const [selectedBuildingForBar, setSelectedBuildingForBar] = useState([]);
+  const [buildingDD, setBuildingDD] = useState([]);
+  const [isYearVisible, setIsYearVisible] = useState(true);
+  const [yearForSurvey, SetYearForSurvey] = useState([]);
+  const [selectedBuildingsBar, setSelectedBuildingsBar] = useState([]);
+  const { register, handleSubmit, control, reset } = useForm();
+  const [ParameterForBar, setParameterForBar] = useState("");
+  const [selectedGroupByBar, setselectedGroupByBar] = useState([]);
+  const [selectedParameterBar, setSelectedParameterBar] = useState([]);
+  const [selectedYearForBar, setSelectedYearForBar] = useState([]);
+  const [selectedEnvironmentBar, setSelectedEnvironmentBar] = useState([]);
+  const [yearForBuilding, SetYearForBuilding] = useState([]);
+  const [YearForBar, setYearForBar] = useState([]);
+  const [selectedClientForBuilding, setSelectedClientForBuilding] = useState(
+    []
+  );
+  const [jobPie, setJobPie] = useState([]);
+  const [xAxisCategoriesArea, setXAxisCategoriesArea] = useState("");
+  const [param, setParam] = useState("");
+  const [dataForArea, setDataForArea] = useState("");
+  const [surveyStaticsLoader, setSurveyStaticsLoader] = useState(true);
 
   const token = localStorage.getItem("milu");
-  const getAllClient = async () => {
+
+  const getAllClientDD = async () => {
     axios
-      .post("https://new.siaqreporting.com/api/v1/client/getAllClientDD", [],{headers: {
-        // Authorization: `Bearer ${token}`
-    }})
+      .post("https://new.siaqreporting.com/api/v1/client/getAllClientDD", [], {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         // console.log("_________________", res);
         const data = [
@@ -130,6 +142,131 @@ function Dashboard() {
         setClient(data);
       })
       .catch((error) => {});
+  };
+
+  const getBuilding = async (value) => {
+    let formData = new FormData();
+    formData.append("clientId", Number(value));
+    axios
+      .post(
+        "https://new.siaqreporting.com/api/v1/client/getAllBuildingDD",
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then((res) => {
+        const data = [
+          {
+            value: "",
+            label: "BuildingName",
+            isDisabled: true,
+          },
+          ...res.data.data.list.map((item) => ({
+            value: item.id.toString(),
+            label:
+              item.name +
+              "at" +
+              (item.adress2 ? item.adress1 + "," + item.adress2 : item.adress1),
+          })),
+        ];
+        setBuildingDD(data);
+      })
+      .catch((err) => {});
+  };
+
+  const getYearForSurveyStatistics = async (value) => {
+    let formData = new FormData();
+    let userid = JSON.parse(localStorage.getItem("user"));
+    formData.append("userId", 1);
+    formData.append("clientId", value);
+    axios
+      .post(
+        "https://new.siaqreporting.com/api/v1/dashboard/getYearDD",
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then((res) => {
+        const data = [
+          { value: "", label: "Select Year", isDisabled: true },
+          ...res.data.data.list.map((item) => ({
+            value: item.year.toString(), // Convert id to string, if needed
+            label: item.year,
+          })),
+        ];
+        SetYearForSurvey(data);
+      })
+      .catch((err) => {});
+  };
+
+  const getBuildingCompGraphParamDD = async () => {
+    await axios
+      .post(
+        " https://new.siaqreporting.com/api/v1/client/getBuildingCompGraphParamDD",
+        [],
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        // console.log(res.data.data);
+        const data = [
+          { value: "", label: "Select Parameter", isDisabled: true },
+          ...res.data.data.paramDD.map((item) => {
+            // Extract text content and original HTML string
+            const value = item.htmlDisplayName.replace(/<\/?[^>]+(>|$)/g, ""); // Remove HTML tags
+            // const value = item.htmlDisplayName.replace(/<[^>]+>/g, '').replace(/\(|\)/g, ''); // Remove HTML tags and parentheses
+
+            return {
+              value: item.columnName.toString(), // Convert id to string, if needed
+              label: value.trim(), // Trim leading and trailing whitespace
+              html: item.htmlDisplayName, // Retain original HTML string
+            };
+          }),
+        ];
+        setParameterForBar(data);
+      });
+  };
+
+  const handleClientChange = (e) => {
+    setSelectedClientForBar(e.target.value.value);
+    setBuildingDD("");
+    getBuilding(e.target.value.value);
+    getYearForSurveyStatistics(e.target.value.value);
+  };
+
+  const handleClientChangeForBuilding = (e) => {
+    setSelectedClientForBuilding(e.target.value.value);
+    setBuildingDD("");
+  };
+
+  const handleBuildingChange = (e) => {
+    if (e.target.value.value != "") {
+      setSelectedBuildingsBar(e.target.value.value);
+    }
+  };
+
+  const handleGroupByChange = (e) => {
+    const selectedValue = e ? e.value : "";
+    if (selectedValue === "year") {
+      setIsYearVisible(false);
+    } else {
+      setIsYearVisible(true);
+    }
+    setselectedGroupByBar(e.value);
+  };
+
+  const handleYearChange = (e) => {
+    setSelectedYearForBar(e.target.value.value);
+  };
+
+  const handleEnvironmentChange = (e) => {
+    selectedEnvironmentBar(e.target.value.value);
+  };
+
+  const handleParameterChange = (e) => {
+    if (selectedBuildingsBar != "") {
+      setSelectedBuildingsBar(selectedBuildingsBar);
+    }
+    setSelectedParameterBar(e.target.value.value);
   };
 
   return (
@@ -176,63 +313,276 @@ function Dashboard() {
           </div>
         </div>
         <br></br>
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-8">
-              <select className="d-inline mx-2">
-                <option onChange={getAllClient}>
-                  Client<span className="text-danger">*</span>
-                </option>
-                {/* {client.map((client, item) => (
-          <option key={item} value={client}>
-            {client}
-            </option>
-            ))} */}
-              </select>
+        <section>
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-lg-8">
+                <div className="select-container-box box-1-com row">
+                  <div className=" col-lg-2">
+                    <Controller
+                      control={control}
+                      name="clientBar"
+                      {...register("clientBar", {
+                        onChange: (data) => handleClientChange(data),
+                      })}
+                      render={({ field }) => (
+                        <>
+                          <Select
+                            {...field}
+                            size="sm"
+                            options={client}
+                            placeholder={
+                              <>
+                                {"Client "}
+                                <span className="text-danger">*</span>
+                              </>
+                            }
+                            name="clientBar"
 
-              <select className="d-inline mx-2">
-                <option>
-                  Building<span className="text-danger">*</span>
-                </option>
-              </select>
+                            // defaultValue={{ label: "Canderel", value: "192" }}
+                          />
+                        </>
+                      )}
+                    />
+                  </div>
 
-              <select className="d-inline mx-2">
-                <option>
-                  Group By<span className="text-danger">*</span>
-                </option>
-              </select>
-              <select className="d-inline mx-2">
-                <option>
-                  Year<span className="text-danger">*</span>
-                </option>
-              </select>
-              <select className="d-inline mx-2">
-                <option>
-                  Environment<span className="text-danger">*</span>
-                </option>
-              </select>
-
-              <select className="d-inline mx-2">
-                <option>
-                  Parameter<span className="text-danger">*</span>
-                </option>
-              </select>
+                  <div className=" col-lg-2">
+                    <Controller
+                      control={control}
+                      name="buildingBar"
+                      {...register("buildingBar", {
+                        onChange: (e) => handleBuildingChange(e),
+                      })}
+                      render={({ field }) => (
+                        <>
+                          <Select
+                            {...field}
+                            size="sm"
+                            options={buildingDD}
+                            placeholder={
+                              <>
+                                {"Building"}
+                                <span className="text-danger">*</span>
+                              </>
+                            }
+                            name="buildingBar"
+                          />
+                        </>
+                      )}
+                    />
+                  </div>
+                  <div className=" col-lg-2">
+                    <Controller
+                      control={control}
+                      name="groupBy"
+                      {...register("groupBy", {
+                        // onChange: (e) => handleBuildingChange(e),
+                      })}
+                      render={({ field }) => (
+                        <>
+                          <Select
+                            {...field}
+                            size="sm"
+                            options={[
+                              {
+                                value: "0",
+                                label: "Select...",
+                                isDisabled: true,
+                              },
+                              { value: "month", label: "Month" },
+                              { value: "year", label: "Year" },
+                            ]}
+                            placeholder={
+                              <>
+                                {" "}
+                                {"GroupBy"}
+                                <span className="text-danger">*</span>
+                              </>
+                            }
+                            onChange={(e) => handleGroupByChange(e)}
+                          />
+                        </>
+                      )}
+                    />
+                  </div>
+                  {isYearVisible && (
+                    <div className="col-lg-2">
+                      <Controller
+                        control={control}
+                        name="yearBar"
+                        {...register("year", {
+                          onChange: (e) => handleYearChange(e),
+                        })}
+                        render={({ field }) => (
+                          <>
+                            <Select
+                              {...field}
+                              size="sm"
+                              options={yearForSurvey}
+                              // placeholder="Year"
+                              placeholder={
+                                <>
+                                  {"Year"}
+                                  <span className="text-danger">*</span>
+                                </>
+                              }
+                            />
+                          </>
+                        )}
+                      />
+                    </div>
+                  )}
+                  <div className="col-lg-2">
+                    <Controller
+                      control={control}
+                      name="environmentBar "
+                      {...register("encironmentBar", {
+                        onChange: (e) => handleEnvironmentChange(e),
+                      })}
+                      render={({ field }) => (
+                        <>
+                          <Select
+                            {...field}
+                            size="sm"
+                            options={[
+                              {
+                                value: 0,
+                                label: "Select...",
+                                isDisabled: true,
+                              },
+                              { value: "true", label: "Indoor" },
+                              { value: false, label: "Outdoor" },
+                            ]}
+                            placeholder={
+                              <>
+                                {"Environment"}
+                                <span className="text-danger">*</span>
+                              </>
+                            }
+                          />
+                        </>
+                      )}
+                    />
+                  </div>
+                  <div className="col-lg-2">
+                    <Controller
+                      control={control}
+                      name="parameterBar"
+                      {...register("parameterBar", {
+                        onChange: (e) => handleParameterChange(e),
+                      })}
+                      render={({ field }) => (
+                        <>
+                          <Select
+                            {...field}
+                            size="sm"
+                            options={ParameterForBar}
+                            placeholder={
+                              <>
+                                {"Parameter"}
+                                <span className="text-danger">*</span>
+                              </>
+                            }
+                          />
+                        </>
+                      )}
+                    />
+                  </div>
+                </div>
+                <br></br>
+                <h6>Survey Statistics</h6>
+              </div>
+              <div className="col-lg-4">
+                <div className="content-view-jobs box-1-com row">
+                  <Col lg="4">
+                    <Controller
+                      control={control}
+                      name="yearBar"
+                      {...register("yearBar", {
+                        // onChange: (e) => { hadlePieYearChange(e.target.value.value) }
+                      })}
+                      render={({ field }) => (
+                        <>
+                          <Select
+                            {...field}
+                            size="sm"
+                            options={YearForBar}
+                            placeholder={
+                              <>
+                                {"Year"}
+                                <span className="text-danger">*</span>
+                              </>
+                            }
+                          />
+                        </>
+                      )}
+                    />
+                  </Col>
+                  <Col lg="4">
+                    <h6 className="p-2">
+                      Completed:{" "}
+                      <span className="color-1">{jobPie[0]?.completed}</span>
+                    </h6>
+                  </Col>
+                  <Col lg="4">
+                    <h6 className="p-2">
+                      Pending:{" "}
+                      <span className="color-2">{jobPie[1]?.incompleted}</span>
+                    </h6>
+                  </Col>
+                </div>
+                <br></br>
+                {/* <HighChartPieChart {...PropsForPie} /> */}
+                <h6>Job Status</h6>
+              </div>
             </div>
-
-            <div className="col-sm-4">
-              <select className="d-inline mx-2">
-                <option>
-                  Year<span className="text-danger">*</span>
-                </option>
-              </select>
-              <p className="d-inline mx-2">Completed:</p>
-              <p className="d-inline mx-2">Pending:</p>
+          </div>
+          <br></br>
+        </section>
+      </div>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <section>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-lg-12 mt-4">
+              <div className="select-container-box box-1-com row">
+                <Col lg="2">
+                  <Controller
+                    control={control}
+                    name="clientcolumn"
+                    {...register("clientBuilding", {
+                      onChange: (e) => {
+                        handleClientChangeForBuilding(e);
+                      },
+                    })}
+                    render={({ field }) => (
+                      <>
+                        <Select
+                          {...field}
+                          size="sm"
+                          options={client}
+                          placeholder={
+                            <>
+                              {"Client"}
+                              <span className="text-danger">*</span>
+                            </>
+                          }
+                          name="clientColumn"
+                        />
+                      </>
+                    )}
+                  />
+                </Col>
+              </div>
             </div>
           </div>
         </div>
         <br></br>
-        <h5>Survey Statistics</h5>
-      </div>
+        <h6>Building Comparison Graph</h6>
+      </section>
     </main>
   );
 }
