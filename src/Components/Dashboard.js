@@ -90,10 +90,11 @@ function Dashboard() {
 
   useEffect(() => {
     Swal.fire({
+      position: "top-center",
+      icon: "success",
       title: "Login Sucess",
-
-      icon: "Sucess",
-      confirmButtonText: "OK",
+      showConfirmButton: false,
+      timer: 1500
     });
     let token = localStorage.getItem("milu");
 
@@ -463,7 +464,7 @@ function Dashboard() {
                             placeholder={
                               <>
                                 {"Environment"}
-                                <span className="text-danger">*</span>
+                                <span className="text-danger">*</span>   
                               </>
                             }
                           />
