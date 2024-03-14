@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
-
 function Navbar() {
   const [backgroundImage, setBackgroundImage] = useState(
     "https://media.istockphoto.com/id/1007374324/photo/view-of-the-promenade-at-night-in-alghero-a-beautiful-city-vibrant-sardinia-italy.jpg?s=2048x2048&w=is&k=20&c=pnhgCyyhoLwmSQQDP-3CDPxMhe8eJ8oNXJcAHEA8U1c="
@@ -60,9 +59,13 @@ function Loginpage() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+
   const handleFieldFocus = (fieldName) => {
     setFocusedField(fieldName);
-  };
+  };  
+
+
   useEffect(() => {
     localStorage.clear();
   });
@@ -86,9 +89,10 @@ function Loginpage() {
         //   "token",
         //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXNhZG1pbiIsImlhdCI6MTcwODM0Mjg4NSwiZXhwIjoxNzA4MzYwODg1fQ.bRXp1c3-vyMh-DW_k_MpMiPzQtKsBizeKHm54RR8SHg"
         // );
-        alert("Login Successful");
+        // alert("Login Successful");
 
         localStorage.setItem("userDetails", JSON.stringify(response.data));
+        
         navigate("/dashboard");
       } else {
         alert(response.data.message);

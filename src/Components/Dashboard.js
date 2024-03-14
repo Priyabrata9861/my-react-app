@@ -12,7 +12,10 @@ import { RiAdminFill } from "react-icons/ri";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import { Col, Button, Row, Form, Modal, Card } from "react-bootstrap";
-const UserList = () => {
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
+
+function UserList() {
   const [collapsed, setCollapsed] = React.useState(false);
   return (
     <div
@@ -28,7 +31,7 @@ const UserList = () => {
           <MdDashboard />
           <MenuItem component={<Link to="/dashboard" />}> Dashboard </MenuItem>
           <FaUser />
-          <MenuItem component={<Link to="/User" />}> Users </MenuItem>
+          <MenuItem component={<Link to="/user" />}> Users </MenuItem>
           <HiMiniUsers />
           <SubMenu label="Clients">
             <MenuItem component={<Link to="/ClientManagement" />}>
@@ -74,7 +77,7 @@ const UserList = () => {
       </div>
     </div>
   );
-};
+}
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -86,6 +89,12 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    Swal.fire({
+      title: "Login Sucess",
+
+      icon: "Sucess",
+      confirmButtonText: "OK",
+    });
     let token = localStorage.getItem("milu");
 
     if (!token) {
@@ -98,19 +107,17 @@ function Dashboard() {
   }, []);
 
   const [client, setClient] = useState([]);
-  const [selectedClientForBar, setSelectedClientForBar] = useState([]);
-  const [selectedBuildingForBar, setSelectedBuildingForBar] = useState([]);
   const [buildingDD, setBuildingDD] = useState([]);
-  const [isYearVisible, setIsYearVisible] = useState(true);
   const [yearForSurvey, SetYearForSurvey] = useState([]);
+  const [ParameterForBar, setParameterForBar] = useState("");
+  const [selectedClientForBar, setSelectedClientForBar] = useState([]);
+  const [isYearVisible, setIsYearVisible] = useState(true);
   const [selectedBuildingsBar, setSelectedBuildingsBar] = useState([]);
   const { register, handleSubmit, control, reset } = useForm();
-  const [ParameterForBar, setParameterForBar] = useState("");
   const [selectedGroupByBar, setselectedGroupByBar] = useState([]);
   const [selectedParameterBar, setSelectedParameterBar] = useState([]);
   const [selectedYearForBar, setSelectedYearForBar] = useState([]);
   const [selectedEnvironmentBar, setSelectedEnvironmentBar] = useState([]);
-  const [yearForBuilding, SetYearForBuilding] = useState([]);
   const [YearForBar, setYearForBar] = useState([]);
   const [selectedClientForBuilding, setSelectedClientForBuilding] = useState(
     []
@@ -259,7 +266,7 @@ function Dashboard() {
   };
 
   const handleEnvironmentChange = (e) => {
-    selectedEnvironmentBar(e.target.value.value);
+    setSelectedEnvironmentBar(e.target.value.value);
   };
 
   const handleParameterChange = (e) => {
@@ -313,7 +320,7 @@ function Dashboard() {
           </div>
         </div>
         <br></br>
-        <section>
+        <section className="op">
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-8">
@@ -487,7 +494,7 @@ function Dashboard() {
                         </>
                       )}
                     />
-                  </div>
+                  </div> 
                 </div>
                 <br></br>
                 <h6>Survey Statistics</h6>
@@ -576,12 +583,147 @@ function Dashboard() {
                     )}
                   />
                 </Col>
+                <Col lg="3">
+                  <Controller
+                    control={control}
+                    name="buildingcolumn"
+                    {...register("", {
+                      onChange: (e) => {
+                        // handleBuildingChangeForCity(e);
+                      },
+                    })}
+                    render={({ field }) => (
+                      <>
+                        <Select
+                          {...field}
+                          size="sm"
+                          // options={buildingDDCity}
+                          placeholder={
+                            <>
+                              {"Building"}
+                              <span className="text-danger">*</span>
+                            </>
+                          }
+                          name="buildingColumn"
+                        />
+                      </>
+                    )}
+                  />
+                </Col>
+                <Col lg="2">
+                  <Controller
+                    control={control}
+                    name="groupBycolumn"
+                    {...register("", {
+                      onChange: (e) => {
+                        // handleBuildingChangeForCity(e);
+                      },
+                    })}
+                    render={({ field }) => (
+                      <>
+                        <Select
+                          {...field}
+                          size="sm"
+                          // options={buildingDDCity}
+                          placeholder={
+                            <>
+                              {"Group By"}
+                              <span className="text-danger">*</span>
+                            </>
+                          }
+                          name="groupByColumn"
+                        />
+                      </>
+                    )}
+                  />
+                </Col>
+                <Col lg="1">
+                  <Controller
+                    control={control}
+                    name="yearcolumn"
+                    {...register("", {
+                      onChange: (e) => {
+                        // handleBuildingChangeForCity(e);
+                      },
+                    })}
+                    render={({ field }) => (
+                      <>
+                        <Select
+                          {...field}
+                          size="sm"
+                          // options={buildingDDCity}
+                          placeholder={
+                            <>
+                              {"Year"}
+                              <span className="text-danger">*</span>
+                            </>
+                          }
+                          name="yearColumn"
+                        />
+                      </>
+                    )}
+                  />
+                </Col>
+                <Col lg="2">
+                  <Controller
+                    control={control}
+                    name="environmentcolumn"
+                    {...register("", {
+                      onChange: (e) => {
+                        // handleBuildingChangeForCity(e);
+                      },
+                    })}
+                    render={({ field }) => (
+                      <>
+                        <Select
+                          {...field}
+                          size="sm"
+                          // options={buildingDDCity}
+                          placeholder={
+                            <>
+                              {"Environment"}
+                              <span className="text-danger">*</span>
+                            </>
+                          }
+                          name="environmentColumn"
+                        />
+                      </>
+                    )}
+                  />
+                </Col>
+                <Col lg="2">
+                  <Controller
+                    control={control}
+                    name="parametercolumn"
+                    {...register("", {
+                      onChange: (e) => {
+                        // handleBuildingChangeForCity(e);
+                      },
+                    })}
+                    render={({ field }) => (
+                      <>
+                        <Select
+                          {...field}
+                          size="sm"
+                          // options={buildingDDCity}
+                          placeholder={
+                            <>
+                              {"Parameter"}
+                              <span className="text-danger">*</span>
+                            </>
+                          }
+                          name="parameterColumn"
+                        />
+                      </>
+                    )}
+                  />
+                </Col>
               </div>
+              <br></br>
+              <h6>Building Comparison Graph</h6>
             </div>
           </div>
         </div>
-        <br></br>
-        <h6>Building Comparison Graph</h6>
       </section>
     </main>
   );
